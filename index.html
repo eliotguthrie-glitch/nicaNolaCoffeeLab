@@ -82,7 +82,6 @@
       font-weight: 700;
       text-transform: uppercase;
       line-height: 0.85;
-      letter-spacing: -0.04em;
       color: rgba(255, 255, 255, 0.55);
       font-size: clamp(40px, 12vw, 220px);
       pointer-events: none;
@@ -96,7 +95,7 @@
     .frame1-type .line-wrap span {
       display: inline-block;
       white-space: nowrap;
-      margin-left: -0.06em;
+      margin-left: -0.03em;
       transform: translateY(110%);
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -265,14 +264,14 @@
       m.style.cssText =
         'position:absolute;top:-9999px;left:0;visibility:hidden;white-space:nowrap;' +
         "font-family:'Space Grotesk',sans-serif;font-weight:700;" +
-        'text-transform:uppercase;letter-spacing:-0.04em;font-size:100px;';
+        'text-transform:uppercase;font-size:100px;';
       document.body.appendChild(m);
 
       document.querySelectorAll('.frame1-type .line-wrap span').forEach(function(span) {
         m.textContent = span.textContent;
         var w = m.getBoundingClientRect().width;
         if (w > 0) {
-          span.style.fontSize = Math.floor(98.5 * vw / w) + 'px';
+          span.style.fontSize = Math.floor(100 * vw / w) + 'px';
         }
       });
 
