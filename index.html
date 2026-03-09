@@ -94,15 +94,13 @@
     }
 
     .frame1-type .line-wrap span {
-      display: inline-block;
-      white-space: nowrap;
-      transform-origin: bottom left;
-      transform: translateY(110%) scaleX(var(--sx, 1));
+      display: block;
+      transform: translateY(110%);
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .frame1-type .line-wrap.revealed span {
-      transform: translateY(0) scaleX(var(--sx, 1));
+      transform: translateY(0);
     }
 
     .frame1-type .line-wrap:nth-child(2).revealed span {
@@ -257,17 +255,26 @@
   </section>
 
   <script>
-    // auto-fit hero text edge-to-edge using scaleX
+    // auto-fit hero text edge-to-edge using canvas measurement
     function fitHeroText() {
-      const lines = document.querySelectorAll('.frame1-type .line-wrap span');
+      const container = document.querySelector('.frame1-type');
+      const style = getComputedStyle(container);
+      const font = style.fontWeight + ' ' + style.fontFamily;
+      const letterSpacing = parseFloat(style.letterSpacing) || 0;
       const vw = document.documentElement.clientWidth;
-      lines.forEach(span => {
-        // reset scale to measure natural width
-        span.style.setProperty('--sx', '1');
-        const natural = span.scrollWidth;
-        if (natural > 0) {
-          span.style.setProperty('--sx', (vw / natural).toFixed(4));
+      const canvas = document.createElement('canvas').getContext('2d');
+
+      document.querySelectorAll('.frame1-type .line-wrap span').forEach(span => {
+        const text = span.textContent;
+        // binary search for the right font-size
+        let lo = 10, hi = 600;
+        while (hi - lo > 1) {
+          const mid = (lo + hi) / 2;
+          canvas.font = mid + 'px ' + font;
+          const w = canvas.measureText(text).width + (letterSpacing / parseFloat(style.fontSize || 1)) * mid * (text.length - 1);
+          if (w < vw) lo = mid; else hi = mid;
         }
+        span.style.fontSize = Math.floor(lo) + 'px';
       });
     }
     // force-load the font, then size
