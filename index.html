@@ -266,8 +266,8 @@
         span.style.fontSize = Math.floor(10 * ratio) + 'px';
       });
     }
-    // wait for fonts to load before sizing
-    document.fonts.ready.then(() => {
+    // force-load the font, then size
+    document.fonts.load("700 1em 'Space Grotesk'").then(() => {
       fitHeroText();
       window.addEventListener('resize', fitHeroText);
     });
