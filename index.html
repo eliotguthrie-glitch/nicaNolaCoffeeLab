@@ -96,12 +96,13 @@
     .frame1-type .line-wrap span {
       display: inline-block;
       white-space: nowrap;
-      transform: translateY(110%);
+      transform-origin: bottom left;
+      transform: translateY(110%) scaleX(var(--sx, 1));
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .frame1-type .line-wrap.revealed span {
-      transform: translateY(0);
+      transform: translateY(0) scaleX(var(--sx, 1));
     }
 
     .frame1-type .line-wrap:nth-child(2).revealed span {
@@ -256,14 +257,17 @@
   </section>
 
   <script>
-    // auto-fit hero text edge-to-edge
+    // auto-fit hero text edge-to-edge using scaleX
     function fitHeroText() {
       const lines = document.querySelectorAll('.frame1-type .line-wrap span');
       const vw = document.documentElement.clientWidth;
       lines.forEach(span => {
-        span.style.fontSize = '10px';
-        const ratio = vw / span.scrollWidth;
-        span.style.fontSize = Math.floor(10 * ratio) + 'px';
+        // reset scale to measure natural width
+        span.style.setProperty('--sx', '1');
+        const natural = span.scrollWidth;
+        if (natural > 0) {
+          span.style.setProperty('--sx', (vw / natural).toFixed(4));
+        }
       });
     }
     // force-load the font, then size
