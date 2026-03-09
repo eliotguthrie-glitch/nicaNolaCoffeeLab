@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NICA Nola — Coffee Lab</title>
+  <meta name="description" content="NICA Nola coffee lab — coming soon, Fall 2026.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+  <!-- ═══ TO USE GALIX EXTRA BOLD ═══
+       1. Drop Galix-ExtraBold.woff2 in same folder
+       2. Uncomment @font-face below
+       3. Change .frame1-type font-family to 'Galix', sans-serif
+       4. Change .f2-name font-family to 'Galix', sans-serif
+
+  <style>
+    @font-face {
+      font-family: 'Galix';
+      src: url('Galix-ExtraBold.woff2') format('woff2');
+      font-weight: 800;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
+  -->
+
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      background: #000;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+    }
+    ::-webkit-scrollbar { display: none; }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    /* ════════════════════════════════
+       FRAME 1 — full bleed + big type
+       ════════════════════════════════ */
+    .frame1 {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    .frame1-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .frame1-type {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0;
+      font-family: 'Archivo Black', sans-serif;
+      font-weight: 400;
+      text-transform: uppercase;
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      color: rgba(255, 255, 255, 0.55);
+      font-size: clamp(60px, 17.5vw, 300px);
+      pointer-events: none;
+    }
+
+    .frame1-type .line-wrap {
+      display: block;
+      overflow: hidden;
+    }
+
+    .frame1-type .line-wrap span {
+      display: block;
+      transform: translateY(110%);
+      transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .frame1-type .line-wrap.revealed span {
+      transform: translateY(0);
+    }
+
+    .frame1-type .line-wrap:nth-child(2).revealed span {
+      transition-delay: 0.15s;
+    }
+
+    
+
+    /* ════════════════════════════════
+       FRAME 2 — black, floating photo
+       ════════════════════════════════ */
+    .frame2 {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      background: #F5F3F0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(24px, 3vw, 40px);
+      padding: clamp(80px, 12vw, 140px) clamp(40px, 8vw, 120px);
+    }
+
+    .f2-photo {
+      max-width: 44%;
+      max-height: 50vh;
+      object-fit: contain;
+      display: block;
+      opacity: 0;
+      transform: scale(0.97);
+      transition: none;
+    }
+
+    .f2-photo.visible {
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+    }
+
+    /* bottom-left name */
+    .f2-name {
+      position: absolute;
+      bottom: clamp(24px, 4vw, 48px);
+      left: clamp(24px, 4vw, 48px);
+      font-family: 'Archivo Black', sans-serif;
+      font-weight: 400;
+      text-transform: uppercase;
+      font-size: clamp(18px, 3vw, 36px);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: rgba(30, 30, 28, 0.65);
+      opacity: 0;
+      transition: none;
+    }
+
+    .f2-name.visible {
+      opacity: 1;
+      transition: opacity 1s ease-out 0.4s;
+    }
+
+    /* bottom-right coming soon */
+    .f2-soon {
+      position: absolute;
+      bottom: clamp(24px, 4vw, 48px);
+      right: clamp(24px, 4vw, 48px);
+      text-align: right;
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      font-size: clamp(12px, 1.4vw, 18px);
+      line-height: 1.5;
+      letter-spacing: 0.06em;
+      color: rgba(30, 30, 28, 0.55);
+      opacity: 0;
+      transition: none;
+    }
+
+    .f2-soon.visible {
+      opacity: 1;
+      transition: opacity 1s ease-out 0.6s;
+    }
+
+    .f2-blurb {
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      font-size: clamp(12px, 1.3vw, 16px);
+      line-height: 1.7;
+      color: rgba(30, 30, 28, 0.7);
+      max-width: 50%;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: none;
+    }
+
+    .f2-blurb.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    /* ── mobile ── */
+    @media (max-width: 768px) {
+      .f2-photo {
+        max-width: 75%;
+        max-height: 40vh;
+      }
+      .f2-name {
+        bottom: clamp(16px, 3vw, 32px);
+        left: clamp(16px, 3vw, 32px);
+        font-size: clamp(14px, 4vw, 24px);
+      }
+      .f2-soon {
+        bottom: clamp(16px, 3vw, 32px);
+        right: clamp(16px, 3vw, 32px);
+        font-size: clamp(10px, 2.5vw, 14px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ FRAME 1: Full bleed + type ═══
+       To use video, replace <img> with:
+       <video class="frame1-img" autoplay muted loop playsinline>
+         <source src="your-video.mp4" type="video/mp4">
+       </video>
+  -->
+  <section class="frame1">
+    <img class="frame1-img" src="packingBeans.jpg" alt="">
+    <div class="frame1-type">
+      <span class="line-wrap"><span>NICA&nbsp;&nbsp;NOLA</span></span>
+      <span class="line-wrap"><span>COFFEE&nbsp;&nbsp;LAB</span></span>
+    </div>
+  </section>
+
+  <!-- ═══ FRAME 2: Black + floating photo ═══ -->
+  <section class="frame2">
+    <p class="f2-blurb" id="f2Blurb">Rooted in the mountains of Nicaragua, brought to life in New Orleans. We source single-origin beans directly from smallholder farmers, roast them with intention, and serve them with care. Every cup tells the story of the hands that grew it, the land that shaped it, and the craft that brought it to your table.</p>
+    <img class="f2-photo" id="f2Photo" src="packingBeans.jpg" alt="">
+    <div class="f2-name" id="f2Name">
+      NICA&nbsp;&nbsp;NOLA<br>
+      COFFEE&nbsp;&nbsp;LAB
+    </div>
+    <div class="f2-soon" id="f2Soon">
+      Coming soon<br>
+      fall 2026
+    </div>
+  </section>
+
+  <script>
+    // scroll-driven text reveal on frame 1
+    const heroSection = document.querySelector('.frame1');
+    const lineWraps = document.querySelectorAll('.frame1-type .line-wrap');
+    let revealed = false;
+
+    function checkScroll() {
+      if (revealed) return;
+      const scrollPct = window.scrollY / (heroSection.offsetHeight * 0.4);
+      if (scrollPct > 0.15) {
+        lineWraps.forEach(el => el.classList.add('revealed'));
+        revealed = true;
+      }
+    }
+
+    window.addEventListener('scroll', checkScroll, { passive: true });
+
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+      });
+    }, { threshold: 0.15 });
+
+    document.getElementById('f2Photo').addEventListener('load', () => {});
+    obs.observe(document.getElementById('f2Blurb'));
+    obs.observe(document.getElementById('f2Photo'));
+    obs.observe(document.getElementById('f2Name'));
+    obs.observe(document.getElementById('f2Soon'));
+  </script>
+</body>
+</html>
