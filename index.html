@@ -258,8 +258,7 @@
   <script>
     // auto-fit hero text edge-to-edge
     function fitHeroText() {
-      const container = document.querySelector('.frame1-type');
-      const lines = container.querySelectorAll('.line-wrap span');
+      const lines = document.querySelectorAll('.frame1-type .line-wrap span');
       const vw = document.documentElement.clientWidth;
       lines.forEach(span => {
         span.style.fontSize = '10px';
@@ -267,8 +266,11 @@
         span.style.fontSize = Math.floor(10 * ratio) + 'px';
       });
     }
-    fitHeroText();
-    window.addEventListener('resize', fitHeroText);
+    // wait for fonts to load before sizing
+    document.fonts.ready.then(() => {
+      fitHeroText();
+      window.addEventListener('resize', fitHeroText);
+    });
 
     // scroll-driven text reveal on frame 1
     // Text reveals as user scrolls through the sticky zone,
