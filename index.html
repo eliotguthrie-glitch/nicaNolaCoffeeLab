@@ -259,16 +259,28 @@
     // auto-fit hero text edge-to-edge
     function fitHeroText() {
       const vw = document.documentElement.clientWidth;
+      const css = getComputedStyle(document.querySelector('.frame1-type'));
+
+      // off-screen measurer — no parent overflow issues
+      const m = document.createElement('span');
+      m.style.cssText =
+        'position:absolute;top:-9999px;left:0;visibility:hidden;white-space:nowrap;' +
+        'font-family:' + css.fontFamily + ';font-weight:' + css.fontWeight + ';' +
+        'text-transform:' + css.textTransform + ';letter-spacing:' + css.letterSpacing + ';' +
+        'font-size:100px;';
+      document.body.appendChild(m);
+
       document.querySelectorAll('.frame1-type .line-wrap span').forEach(span => {
-        // measure at a known size, then scale proportionally
-        span.style.fontSize = '100px';
-        const measured = span.getBoundingClientRect().width;
-        if (measured > 0) {
-          span.style.fontSize = Math.floor(100 * (vw / measured)) + 'px';
+        m.textContent = span.textContent;
+        const w = m.getBoundingClientRect().width;
+        if (w > 0) {
+          span.style.fontSize = Math.floor(100 * vw / w) + 'px';
         }
       });
+
+      document.body.removeChild(m);
     }
-    // force-load the font, then size
+
     document.fonts.load("700 1em 'Space Grotesk'").then(() => {
       fitHeroText();
       window.addEventListener('resize', fitHeroText);
