@@ -259,20 +259,17 @@
     // auto-fit hero text edge-to-edge
     function fitHeroText() {
       const vw = document.documentElement.clientWidth;
-      const css = getComputedStyle(document.querySelector('.frame1-type'));
 
-      // off-screen measurer — no parent overflow issues
-      const m = document.createElement('span');
+      var m = document.createElement('span');
       m.style.cssText =
         'position:absolute;top:-9999px;left:0;visibility:hidden;white-space:nowrap;' +
-        'font-family:' + css.fontFamily + ';font-weight:' + css.fontWeight + ';' +
-        'text-transform:' + css.textTransform + ';letter-spacing:' + css.letterSpacing + ';' +
-        'font-size:100px;';
+        "font-family:'Space Grotesk',sans-serif;font-weight:700;" +
+        'text-transform:uppercase;letter-spacing:-0.04em;font-size:100px;';
       document.body.appendChild(m);
 
-      document.querySelectorAll('.frame1-type .line-wrap span').forEach(span => {
+      document.querySelectorAll('.frame1-type .line-wrap span').forEach(function(span) {
         m.textContent = span.textContent;
-        const w = m.getBoundingClientRect().width;
+        var w = m.getBoundingClientRect().width;
         if (w > 0) {
           span.style.fontSize = Math.floor(100 * vw / w) + 'px';
         }
@@ -281,7 +278,7 @@
       document.body.removeChild(m);
     }
 
-    document.fonts.load("700 1em 'Space Grotesk'").then(() => {
+    document.fonts.load("700 1em 'Space Grotesk'").then(function() {
       fitHeroText();
       window.addEventListener('resize', fitHeroText);
     });
