@@ -94,7 +94,8 @@
     }
 
     .frame1-type .line-wrap span {
-      display: block;
+      display: inline-block;
+      white-space: nowrap;
       transform: translateY(110%);
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -255,26 +256,16 @@
   </section>
 
   <script>
-    // auto-fit hero text edge-to-edge using canvas measurement
+    // auto-fit hero text edge-to-edge
     function fitHeroText() {
-      const container = document.querySelector('.frame1-type');
-      const style = getComputedStyle(container);
-      const font = style.fontWeight + ' ' + style.fontFamily;
-      const letterSpacing = parseFloat(style.letterSpacing) || 0;
       const vw = document.documentElement.clientWidth;
-      const canvas = document.createElement('canvas').getContext('2d');
-
       document.querySelectorAll('.frame1-type .line-wrap span').forEach(span => {
-        const text = span.textContent;
-        // binary search for the right font-size
-        let lo = 10, hi = 600;
-        while (hi - lo > 1) {
-          const mid = (lo + hi) / 2;
-          canvas.font = mid + 'px ' + font;
-          const w = canvas.measureText(text).width + (letterSpacing / parseFloat(style.fontSize || 1)) * mid * (text.length - 1);
-          if (w < vw) lo = mid; else hi = mid;
+        // measure at a known size, then scale proportionally
+        span.style.fontSize = '100px';
+        const measured = span.getBoundingClientRect().width;
+        if (measured > 0) {
+          span.style.fontSize = Math.floor(100 * (vw / measured)) + 'px';
         }
-        span.style.fontSize = Math.floor(lo) + 'px';
       });
     }
     // force-load the font, then size
