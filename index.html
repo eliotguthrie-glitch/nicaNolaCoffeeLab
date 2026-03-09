@@ -203,6 +203,64 @@
       transition: opacity 0.8s ease-out;
     }
 
+    /* custom cursor for frame 2 */
+    .frame2 { cursor: none; }
+
+    .custom-cursor {
+      position: fixed;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid #39FF14;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s;
+      display: none;
+    }
+
+    .custom-cursor.active {
+      width: 48px;
+      height: 48px;
+      background: rgba(57, 255, 20, 0.15);
+    }
+
+    /* hover trigger words */
+    .hover-trigger {
+      cursor: none;
+      text-decoration: underline;
+      text-decoration-color: rgba(30, 30, 28, 0.25);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.3s;
+    }
+
+    .hover-trigger:hover {
+      text-decoration-color: #39FF14;
+    }
+
+    /* hover image modal */
+    .hover-modal {
+      position: fixed;
+      z-index: 9998;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s ease-out;
+      transform: translate(-50%, -110%);
+    }
+
+    .hover-modal.show {
+      opacity: 1;
+    }
+
+    .hover-modal img {
+      display: block;
+      max-width: 320px;
+      max-height: 240px;
+      object-fit: cover;
+      border-radius: 4px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    }
+
     /* ── mobile ── */
     @media (max-width: 768px) {
       .f2-photo {
@@ -242,7 +300,7 @@
 
   <!-- ═══ FRAME 2: Black + floating photo ═══ -->
   <section class="frame2">
-    <p class="f2-blurb" id="f2Blurb">From our farms in the Nicaraguan highlands to our roastery in New Orleans, we control every step. We grow it. Harvest it. Mill it. Import it. Roast it. Serve it. That's not a supply chain. That's a commitment.</p>
+    <p class="f2-blurb" id="f2Blurb">From our farms in the <span class="hover-trigger" data-img="nicaragua.jpg">Nicaraguan</span> highlands to our roastery in <span class="hover-trigger" data-img="newOrleans.jpg">New Orleans</span>, we control every step. We grow it. <span class="hover-trigger" data-img="harvest.jpg">Harvest</span> it. <span class="hover-trigger" data-img="mill.jpeg">Mill</span> it. <span class="hover-trigger" data-img="import.jpeg">Import</span> it. <span class="hover-trigger" data-img="roast.jpg">Roast</span> it. Serve it. That's not a supply chain. That's a commitment.</p>
     <img class="f2-photo" id="f2Photo" src="packingBeans_BW.jpg" alt="">
     <div class="f2-name" id="f2Name">
       NICA&nbsp;&nbsp;NOLA<br>
@@ -253,6 +311,9 @@
       fall 2026
     </div>
   </section>
+
+  <div class="custom-cursor" id="customCursor"></div>
+  <div class="hover-modal" id="hoverModal"><img src="" alt=""></div>
 
   <script>
     // auto-fit hero text edge-to-edge
@@ -311,6 +372,40 @@
     obs.observe(document.getElementById('f2Photo'));
     obs.observe(document.getElementById('f2Name'));
     obs.observe(document.getElementById('f2Soon'));
+
+    // custom cursor + hover modals
+    const cursor = document.getElementById('customCursor');
+    const modal = document.getElementById('hoverModal');
+    const modalImg = modal.querySelector('img');
+    const frame2 = document.querySelector('.frame2');
+    let inFrame2 = false;
+
+    document.addEventListener('mousemove', function(e) {
+      const rect = frame2.getBoundingClientRect();
+      inFrame2 = e.clientY >= rect.top && e.clientY <= rect.bottom;
+      if (inFrame2) {
+        cursor.style.display = 'block';
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        modal.style.left = e.clientX + 'px';
+        modal.style.top = e.clientY + 'px';
+      } else {
+        cursor.style.display = 'none';
+        modal.classList.remove('show');
+      }
+    });
+
+    document.querySelectorAll('.hover-trigger').forEach(function(trigger) {
+      trigger.addEventListener('mouseenter', function() {
+        modalImg.src = trigger.dataset.img;
+        modal.classList.add('show');
+        cursor.classList.add('active');
+      });
+      trigger.addEventListener('mouseleave', function() {
+        modal.classList.remove('show');
+        cursor.classList.remove('active');
+      });
+    });
   </script>
 </body>
 </html>
