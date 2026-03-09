@@ -7,7 +7,7 @@
   <meta name="description" content="NICA Nola coffee lab — coming soon, Fall 2026.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=DM+Mono:wght@300;400&family=IBM+Plex+Serif:wght@400&display=swap" rel="stylesheet">
 
   <!-- ═══ TO USE GALIX EXTRA BOLD ═══
        1. Drop Galix-ExtraBold.woff2 in same folder
@@ -51,6 +51,14 @@
     .frame1 {
       position: relative;
       width: 100%;
+      height: 200vh;
+      height: 200dvh;
+    }
+
+    .frame1-sticky {
+      position: sticky;
+      top: 0;
+      width: 100%;
       height: 100vh;
       height: 100dvh;
       overflow: hidden;
@@ -70,13 +78,13 @@
       left: 0;
       right: 0;
       padding: 0;
-      font-family: 'Archivo Black', sans-serif;
-      font-weight: 400;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
       text-transform: uppercase;
       line-height: 0.85;
       letter-spacing: -0.04em;
       color: rgba(255, 255, 255, 0.55);
-      font-size: clamp(60px, 17.5vw, 300px);
+      font-size: clamp(40px, 12vw, 220px);
       pointer-events: none;
     }
 
@@ -139,8 +147,8 @@
       position: absolute;
       bottom: clamp(24px, 4vw, 48px);
       left: clamp(24px, 4vw, 48px);
-      font-family: 'Archivo Black', sans-serif;
-      font-weight: 400;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
       text-transform: uppercase;
       font-size: clamp(18px, 3vw, 36px);
       line-height: 1.1;
@@ -177,8 +185,8 @@
     }
 
     .f2-blurb {
-      font-family: 'DM Mono', monospace;
-      font-weight: 300;
+      font-family: 'IBM Plex Serif', serif;
+      font-weight: 400;
       font-size: clamp(12px, 1.3vw, 16px);
       line-height: 1.7;
       color: rgba(30, 30, 28, 0.7);
@@ -223,10 +231,12 @@
        </video>
   -->
   <section class="frame1">
-    <img class="frame1-img" src="packingBeans.jpg" alt="">
-    <div class="frame1-type">
-      <span class="line-wrap"><span>NICA&nbsp;&nbsp;NOLA</span></span>
-      <span class="line-wrap"><span>COFFEE&nbsp;&nbsp;LAB</span></span>
+    <div class="frame1-sticky">
+      <img class="frame1-img" src="packingBeans.jpg" alt="">
+      <div class="frame1-type">
+        <span class="line-wrap"><span>NICA&nbsp;&nbsp;NOLA</span></span>
+        <span class="line-wrap"><span>COFFEE&nbsp;&nbsp;LAB</span></span>
+      </div>
     </div>
   </section>
 
@@ -246,14 +256,17 @@
 
   <script>
     // scroll-driven text reveal on frame 1
+    // Text reveals as user scrolls through the sticky zone,
+    // then the whole section scrolls away naturally.
     const heroSection = document.querySelector('.frame1');
     const lineWraps = document.querySelectorAll('.frame1-type .line-wrap');
     let revealed = false;
 
     function checkScroll() {
       if (revealed) return;
-      const scrollPct = window.scrollY / (heroSection.offsetHeight * 0.4);
-      if (scrollPct > 0.15) {
+      // trigger once user has scrolled ~30% into the extra scroll space
+      const scrollable = heroSection.offsetHeight - window.innerHeight;
+      if (scrollable > 0 && window.scrollY / scrollable > 0.3) {
         lineWraps.forEach(el => el.classList.add('revealed'));
         revealed = true;
       }
