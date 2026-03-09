@@ -194,16 +194,13 @@
       max-width: 70%;
       text-align: center;
       transform: translateY(-20%);
-      min-height: 1.7em;
+      opacity: 0;
+      transition: none;
     }
 
-    .f2-blurb.typing::after {
-      content: '|';
-      animation: blink 0.6s step-end infinite;
-    }
-
-    @keyframes blink {
-      50% { opacity: 0; }
+    .f2-blurb.visible {
+      opacity: 1;
+      transition: opacity 0.8s ease-out;
     }
 
     /* ── mobile ── */
@@ -245,7 +242,7 @@
 
   <!-- ═══ FRAME 2: Black + floating photo ═══ -->
   <section class="frame2">
-    <p class="f2-blurb" id="f2Blurb" data-text="Rooted in the mountains of Nicaragua, brought to life in New Orleans. We source single-origin beans directly from smallholder farmers, roast them with intention, and serve them with care. Every cup tells the story of the hands that grew it, the land that shaped it, and the craft that brought it to your table."></p>
+    <p class="f2-blurb" id="f2Blurb">From our farms in the Nicaraguan highlands to our roastery in New Orleans, we control every step. We grow it. Harvest it. Mill it. Import it. Roast it. Serve it. That's not a supply chain. That's a commitment.</p>
     <img class="f2-photo" id="f2Photo" src="packingBeans_BW.jpg" alt="">
     <div class="f2-name" id="f2Name">
       NICA&nbsp;&nbsp;NOLA<br>
@@ -304,41 +301,13 @@
 
     window.addEventListener('scroll', checkScroll, { passive: true });
 
-    // typing animation for blurb
-    function typeText(el) {
-      const text = el.dataset.text;
-      let i = 0;
-      el.classList.add('typing');
-      function tick() {
-        el.textContent = text.slice(0, i);
-        i++;
-        if (i <= text.length) {
-          setTimeout(tick, 30);
-        } else {
-          el.classList.remove('typing');
-        }
-      }
-      tick();
-    }
-
-    const blurb = document.getElementById('f2Blurb');
-    let blurbTyped = false;
-
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
-        if (e.isIntersecting) {
-          if (e.target === blurb && !blurbTyped) {
-            blurbTyped = true;
-            typeText(blurb);
-          } else {
-            e.target.classList.add('visible');
-          }
-        }
+        if (e.isIntersecting) e.target.classList.add('visible');
       });
     }, { threshold: 0.15 });
 
-    document.getElementById('f2Photo').addEventListener('load', () => {});
-    obs.observe(blurb);
+    obs.observe(document.getElementById('f2Blurb'));
     obs.observe(document.getElementById('f2Photo'));
     obs.observe(document.getElementById('f2Name'));
     obs.observe(document.getElementById('f2Soon'));
