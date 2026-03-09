@@ -94,7 +94,8 @@
     }
 
     .frame1-type .line-wrap span {
-      display: block;
+      display: inline-block;
+      white-space: nowrap;
       transform: translateY(110%);
       transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -255,6 +256,20 @@
   </section>
 
   <script>
+    // auto-fit hero text edge-to-edge
+    function fitHeroText() {
+      const container = document.querySelector('.frame1-type');
+      const lines = container.querySelectorAll('.line-wrap span');
+      const vw = document.documentElement.clientWidth;
+      lines.forEach(span => {
+        span.style.fontSize = '10px';
+        const ratio = vw / span.scrollWidth;
+        span.style.fontSize = Math.floor(10 * ratio) + 'px';
+      });
+    }
+    fitHeroText();
+    window.addEventListener('resize', fitHeroText);
+
     // scroll-driven text reveal on frame 1
     // Text reveals as user scrolls through the sticky zone,
     // then the whole section scrolls away naturally.
